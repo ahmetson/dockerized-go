@@ -13,7 +13,7 @@ ARG TARGETARCH
 RUN --mount=target=. \
     --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
-    GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o /out/example .
+    GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o /out/evm-indexer .
 
 FROM base AS unit-test
 RUN --mount=target=. \
@@ -35,12 +35,12 @@ FROM scratch AS unit-test-coverage
 COPY --from=unit-test /out/cover.out /cover.out
 
 FROM scratch AS bin-unix
-COPY --from=build /out/example /
+COPY --from=build /out/evm-indexer /
 
 FROM bin-unix AS bin-linux
 FROM bin-unix AS bin-darwin
 
 FROM scratch AS bin-windows
-COPY --from=build /out/example /example.exe
+COPY --from=build /out/evm-indexer /evm-indexer.exe
 
 FROM bin-${TARGETOS} as bin

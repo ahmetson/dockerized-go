@@ -1,10 +1,10 @@
-all: bin/example
+all: bin/evm-indexer
 test: lint unit-test
 
 PLATFORM=local
 
-.PHONY: bin/example
-bin/example:
+.PHONY: bin/evm-indexer
+bin/evm-indexer:
 	@docker build . --target bin \
 	--output bin/ \
 	--platform ${PLATFORM}

@@ -1,4 +1,4 @@
-module github.com/chris-crone/containerized-go
+module github.com/blocklords/evm-indexer
 
 go 1.15
 
