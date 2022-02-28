@@ -1,22 +1,11 @@
 ![Continuous Integration](https://github.com/chris-crone/containerized-go-dev/workflows/Continuous%20Integration/badge.svg)
 
-Example Containerized Go Development Environment
+Containerized Go Development Environment
 ------------------------------------------------
 
 This repository contains an example Go project with a containerized development
 environment. The example project is a simple CLI tool that echos back its
 inputs.
-
-## Why should I containerize my development environment?
-
-There are several advantages to containerizing your development environment:
-* You make explicit the tools and versions of tools required to develop your
-  project
-* Your builds will be more deterministic and reproducible
-
-These will both make it easier for people to collaborate on your project, as
-everyone will have the same environment, and make it easier to debug things like
-CI failures.
 
 ## Prerequisites
 
@@ -50,7 +39,7 @@ done by setting `DOCKER_BUILDKIT=1` in your environment.
 ## Getting started
 
 Building the project will output a static binary in the bin/ folder. The
-default platform is for macOS but this can be changed using the `PLATFORM` variable:
+default platform is for Windows but this can be changed using the `PLATFORM` variable:
 ```console
 $ make                        # build for your host OS
 $ make PLATFORM=darwin/amd64  # build for macOS
@@ -59,9 +48,17 @@ $ make PLATFORM=linux/amd64   # build for Linux x86_64
 $ make PLATFORM=linux/arm     # build for Linux ARM
 ```
 
+You can also set the name of the application in the bin/ folder.
+The default name of the application is set as `myApp` in Makefile.
+```console
+$ make NAME=example                         # build example for your host OS
+$ make PLATFORM=windows/amd64 NAME=example  # build example.exe for Windows x86_64
+$ make NAME=win/example                     # build example application in /bin/win folder
+```
+
 You can then run the binary, which is a simple echo binary, as follows:
 ```console
-$ ./bin/example hello world!
+$ ./bin/myApp hello world!
 hello world!
 ```
 

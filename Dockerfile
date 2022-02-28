@@ -8,12 +8,14 @@ RUN --mount=type=cache,target=/go/pkg/mod \
     go mod download
 
 FROM base AS build
+ARG go_app_name
+RUN echo "Oh dang look at that $go_app_name"
 ARG TARGETOS
 ARG TARGETARCH
 RUN --mount=target=. \
     --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
-    GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o /out/evm-indexer .
+    GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o /out/${go_app_name} .
 
 FROM base AS unit-test
 RUN --mount=target=. \
@@ -35,12 +37,14 @@ FROM scratch AS unit-test-coverage
 COPY --from=unit-test /out/cover.out /cover.out
 
 FROM scratch AS bin-unix
-COPY --from=build /out/evm-indexer /
+ARG go_app_name
+COPY --from=build /out/${go_app_name} /
 
 FROM bin-unix AS bin-linux
 FROM bin-unix AS bin-darwin
 
 FROM scratch AS bin-windows
-COPY --from=build /out/evm-indexer /evm-indexer.exe
+ARG go_app_name
+COPY --from=build /out/${go_app_name} /${go_app_name}.exe
 
 FROM bin-${TARGETOS} as bin
